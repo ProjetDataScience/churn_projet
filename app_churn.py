@@ -1,7 +1,6 @@
 import pandas as pd
 import joblib
 import streamlit as st
-import shap
 import matplotlib.pyplot as plt
 
 # Image pour illustrer
@@ -128,11 +127,19 @@ if menu == "Prédiction individuelle":
             st.markdown("### ✅ **Le client est probablement fidèle.**")
             st.success("Pas de risque immédiat détecté.")
         
-        # Explication SHAP
+        import streamlit.components.v1 as components
+        import shap
+
+        def st_shap(plot, height=None):
+            shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
+            components.html(shap_html, height=height)
+
+        # Explication avec force_plot (JS)
         shap_values = explainer(input_data)
-        st.subheader("📊 Explication de la prédiction (SHAP)")
-        fig = shap.plots.waterfall(shap_values[0], max_display=15, show=False)
-        st.pyplot(fig)
+        force_plot = shap.force_plot(explainer.expected_value[0], shap_values.values[0], input_data)
+
+        st.subheader("📊 Explication SHAP interactive")
+        st_shap(force_plot, height=300)
 
 elif menu == "Prédiction par lot": 
     st.title("Prédiction de l'attriction des clients 🏃‍♂️ 🏃‍♂️ 🏃‍♂️ 🏃‍♂️ 🏃‍♂️CHURN🏃 🏃‍♂️ 🏃‍♂️ 🏃‍♂️")
