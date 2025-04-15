@@ -2,7 +2,6 @@ import pandas as pd
 import joblib
 import streamlit as st
 import matplotlib.pyplot as plt
-import shap
 
 # Image pour illustrer
 col1, col2, col3 = st.columns([1, 4, 1])
@@ -12,9 +11,6 @@ with col2:
 # Charger le modèle et le scaler
 model = joblib.load('model/churn_model.pkl')
 scaler = joblib.load('model/churn_scaler.pkl')
-
-# SHAP explainer
-explainer = shap.Explainer(model)
 
 st.sidebar.title("**Menu**")
 menu = st.sidebar.radio(" 👇 Choisissez une option", ["Prédiction individuelle", "Prédiction par lot"])
@@ -127,20 +123,6 @@ if menu == "Prédiction individuelle":
         if prediction == 0 :
             st.markdown("### ✅ **Le client est probablement fidèle.**")
             st.success("Pas de risque immédiat détecté.")
-        
-        import streamlit.components.v1 as components
-        import shap
-
-        def st_shap(plot, height=None):
-            shap_html = f"<head>{shap.getjs()}</head><body>{plot.html()}</body>"
-            components.html(shap_html, height=height)
-
-        # Explication avec force_plot (JS)
-        shap_values = explainer(input_data)
-        force_plot = shap.force_plot(explainer.expected_value[0], shap_values.values[0], input_data)
-
-        st.subheader("📊 Explication SHAP interactive")
-        st_shap(force_plot, height=300)
 
 elif menu == "Prédiction par lot": 
     st.title("Prédiction de l'attriction des clients 🏃‍♂️ 🏃‍♂️ 🏃‍♂️ 🏃‍♂️ 🏃‍♂️CHURN🏃 🏃‍♂️ 🏃‍♂️ 🏃‍♂️")
