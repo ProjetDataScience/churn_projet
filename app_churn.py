@@ -1,7 +1,6 @@
 import pandas as pd
 import joblib
 import streamlit as st
-import matplotlib.pyplot as plt
 
 # Image pour illustrer
 col1, col2, col3 = st.columns([1, 4, 1])
