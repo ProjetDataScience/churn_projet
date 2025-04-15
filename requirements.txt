@@ -1,0 +1,6 @@
+pandas 
+joblib
+scikit-learn
+streamlit
+matplotlib
+shap==0.41.0
